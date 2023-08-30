@@ -1,0 +1,30 @@
+import os,random
+isgame=True
+a=["rock","paper","scissor"]
+c_score,u_score=0,0
+def comp(a):
+  return random.choice(a)
+while isgame:
+     choice=str(input("Enter as rock , paper , scissor or exit \n"))
+     if choice=='exit':
+        exit()
+     computer=comp(a)
+     print(computer)
+     elif choice == computer:
+        u_score=u_score
+        c_score=c_score
+        print(f"Tie")
+        print(f"user {u_score} : computer {c_score}")
+        os.system('cls')
+     if (computer == 'rock' and choice == 'scissor') or (computer =='paper' and choice=='rock') or (computer=='scissor' and choice =='paper'):
+        u_score-=1
+        c_score+=1
+        print('Computer won')
+        print(f"user {u_score} : computer {c_score}")
+        os.system('cls')
+     else:
+        u_score+=1
+        c_score-=1
+        print(f"User win ")
+        print(f"user {u_score} : computer {c_score}")
+        os.system('cls')
