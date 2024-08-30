@@ -3,25 +3,40 @@ create procedure temptableinsertrow
 	  @stu_name varchar(50),
 	  @joined_date date,
 	  @marks int,
-	  @status ENUM('good','avg','bad'),
+	  @status varchar(20),
 	  @bmi decimal(2,1)
 as
 begin
     begin try
-	   if exists (select * from #temptable)
+	   if exists (select * from tempdb.sys.tables where name like '%##temptables%')
 	       begin
-		     insert into #temptable(@stu_id,@stu_name,@joined_date,@marks,@status,@bmi)
+		     insert into ##temptables(id,names,joindate,mark,states,bmicalculator) values (@stu_id,@stu_name,@joined_date,@marks,@status,@bmi);
+			 select * from #temptables;
 			 print 'Succesully inserted the row'
 		   end
 	   else
 	      begin
-		     create table #temptable( 
-			     @id bigint,
-	             @name varchar(50),
-	             @joindate date,
-	             @mark int,
-	             @states ENUM('good','avg','bad'),
-	             @bmicalculator decimal(2,1)
+		     create table ##temptables( 
+			     id bigint,
+	             names varchar(50),
+	             joindate date,
+	             mark int,
+	             states varchar(20),
+	             bmicalculator decimal(2,1)
 				 );
-			end
+		  end
+	  end try
+	  begin catch
+		print 'error occured '+error_message()
+	  end catch
+end
 
+drop procedure temptableinsertrow
+execute temptableinsertrow
+      @stu_id =1,
+	  @stu_name ='harish',
+	  @joined_date = '2020-04-12',
+	  @marks =87,
+	  @status='good',
+	  @bmi=7.9;
+select * from ##temptables
